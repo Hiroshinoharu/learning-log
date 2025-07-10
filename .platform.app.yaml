@@ -8,7 +8,7 @@ web:
   upstream:
     socket_family: unix
   commands:
-    start: "gunicorn -w 4 -b 0.0.0.0:8000 learning_logs.wsgi:application --timeout 120"
+    start: "gunicorn -w 4 -b 0.0.0.0:8000 ll_project.wsgi:application --timeout 120"
   locations:
     "/":
       passthru: true
