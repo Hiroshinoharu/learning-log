@@ -37,7 +37,9 @@ mounts:
 hooks:
     build: |
         pip install --upgrade pip
-        pip install gunicorn psycopg2
+        # Force install database adapter
+        pip install --force-reinstall psycopg2-binary
+        pip install gunicorn
         pip install -r requirements.txt
         pip install -r requirements_remote.txt
         
