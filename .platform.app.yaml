@@ -7,13 +7,14 @@ relationships:
 variables:
     env:
         DJANGO_SETTINGS_MODULE: 'll_project.settings'
-        DEBUG: 'False'
+        PIP_INDEX_URL: 'https://pypi.org/simple/'
+        PIP_TRUSTED_HOST: 'pypi.org'
 
 web:
     upstream:
         socket_family: unix
     commands:
-        start: "python -m gunicorn -w 4 -b unix:$SOCKET ll_project.wsgi:application"
+        start: "gunicorn -w 4 -b unix:$SOCKET ll_project.wsgi:application"
     locations:
         "/":
             passthru: true
@@ -31,22 +32,10 @@ mounts:
 
 hooks:
     build: |
-        set -e
-        pip install --upgrade pip setuptools wheel
-        
-        # Install dependencies with verbose output
-        pip install -v psycopg[binary]==3.2.3
-        pip install -v gunicorn==21.2.0
-        
-        # Install other requirements
+        pip install --upgrade pip
+        pip install --index-url https://pypi.org/simple/ --trusted-host pypi.org psycopg2-binary==2.9.9
+        pip install --index-url https://pypi.org/simple/ --trusted-host pypi.org gunicorn==21.2.0
         pip install -r requirements.txt
-        pip install -r requirements_remote.txt
-        
-        # Debug: Show what's installed
-        pip list | grep -E "(psycopg|gunicorn)"
-        python -c "import psycopg; print('psycopg imported successfully')"
-        python -c "import gunicorn; print('gunicorn imported successfully')"
-        
         mkdir -p logs
         python manage.py collectstatic --noinput
     deploy: |
