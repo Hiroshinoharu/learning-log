@@ -4,7 +4,6 @@ type: "python:3.10"
 relationships: 
   database: "db:postgresql"
 
-# The configuration of the app when it is deployed
 web:
   upstream:
     socket_family: unix
@@ -18,26 +17,19 @@ web:
       expires: 1h
       allow: true
 
-
-# The size of the persistent disk of application (in mb)
 disk: 512
 
-# Set a local read/write mount for logs
 mounts: 
   "logs":
     source: local
     source_path: "logs"
 
-
-# The hooks executed at various points in the app lifecycle
 hooks:
   build: |
     pip install --upgrade pip
     pip install -r requirements.txt
-    pip install -r requirements-_remote.txt
+    pip install -r requirements_remote.txt
 
-    mkdir logs
-    python manage.py collectstatic
-    rm -rf logs
+    python manage.py collectstatic --noinput
   deploy: |
     python manage.py migrate
