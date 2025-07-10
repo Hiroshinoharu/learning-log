@@ -1,4 +1,4 @@
 # Requirements for live project.
-psycopg2
-platformshconfig
 gunicorn
+psycopg2-binary
+platformshconfig
