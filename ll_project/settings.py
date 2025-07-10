@@ -136,8 +136,12 @@ LOGIN_URL = 'accounts:login'
 
 # Platform.sh settings.
 from platformshconfig import Config
+import sys
 
 config = Config()
+
+print("🟩 Platform.sh config valid:", config.is_valid_platform(), file=sys.stderr)
+
 if config.is_valid_platform():
     ALLOWED_HOSTS.append('.platformsh.site')
     DEBUG = False
