@@ -27,7 +27,7 @@ mounts:
 hooks:
     build: |
         python -m pip install --upgrade pip
-        python -m pip install -r requirements.txt
+        python -m pip install --no-cache-dir --verbose -r requirements.txt
         mkdir logs
         python manage.py collectstatic --noinput
     deploy: |
