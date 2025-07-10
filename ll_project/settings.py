@@ -147,14 +147,15 @@ if config.is_valid_platform():
     if config.projectEntropy:
         SECRET_KEY = config.projectEntropy
 
-db_settings = config.credentials('database')
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': db_settings['path'],
-        'USER': db_settings['username'],
-        'PASSWORD': db_settings['password'],
-        'HOST': db_settings['host'],
-        'PORT': db_settings['port'],
+    if not config.in_build():
+        db_settings = config.credentials('database')
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': db_settings['path'],
+                'USER': db_settings['username'],
+                'PASSWORD': db_settings['password'],
+                'HOST': db_settings['host'],
+                'PORT': db_settings['port'],
     },
 }
