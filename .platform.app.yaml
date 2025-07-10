@@ -26,9 +26,14 @@ mounts:
 
 hooks:
     build: |
+        echo "Starting build hook"
+        python --version
+        which python || where python
+        python -m pip --version
         python -m pip install --upgrade pip
         python -m pip install --no-cache-dir --verbose -r requirements.txt
         mkdir logs
         python manage.py collectstatic --noinput
+        echo "Build hook completed"
     deploy: |
         python manage.py migrate
