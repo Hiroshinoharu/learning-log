@@ -1,3 +1,2 @@
-# Requirements for live project.
-psycopg2-binary
-gunicorn
+psycopg2-binary==2.9.9
+gunicorn==21.2.0

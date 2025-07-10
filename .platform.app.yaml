@@ -1,16 +1,17 @@
 name: "ll_project"
 type: "python:3.10"
 
+dependencies:
+    python3:
+        pip: "*"
+
 relationships:
     database: "db:postgresql"
 
-# Add the variables section here
 variables:
     env:
         DJANGO_SETTINGS_MODULE: 'll_project.settings'
-        DEBUG: 'False'
 
-# The configuration of the app when it's exposed to the web.
 web:
     upstream:
         socket_family: unix
@@ -24,21 +25,17 @@ web:
             expires: 1h
             allow: true
 
-# The size of the persistent disk of the application (in MB).
 disk: 512
 
-# Set a local read/write mount for logs.
 mounts:
     "logs":
         source: local
         source_path: logs
 
-# The hooks executed at various points in the lifecycle of the application.
 hooks:
     build: |
         pip install --upgrade pip
-        # Force install database adapter
-        pip install --force-reinstall psycopg2-binary
+        pip install psycopg==3.2.3
         pip install gunicorn
         pip install -r requirements.txt
         pip install -r requirements_remote.txt
