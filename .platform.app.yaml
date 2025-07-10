@@ -4,12 +4,7 @@ type: "python:3.10"
 relationships:
     database: "db:postgresql"
 
-variables:
-    env:
-        DJANGO_SETTINGS_MODULE: 'll_project.settings'
-        PIP_INDEX_URL: 'https://pypi.org/simple/'
-        PIP_TRUSTED_HOST: 'pypi.org'
-
+# The configuration of the app when it's exposed to the web.
 web:
     upstream:
         socket_family: unix
@@ -23,20 +18,24 @@ web:
             expires: 1h
             allow: true
 
+# The size of the persistent disk of the application (in MB).
 disk: 512
 
+# Set a local read/write mount for logs.
 mounts:
     "logs":
         source: local
         source_path: logs
 
+# The hooks executed at various points in the lifecycle of the application.
 hooks:
     build: |
         pip install --upgrade pip
-        pip install --index-url https://pypi.org/simple/ --trusted-host pypi.org psycopg2-binary==2.9.9
-        pip install --index-url https://pypi.org/simple/ --trusted-host pypi.org gunicorn==21.2.0
         pip install -r requirements.txt
-        mkdir -p logs
-        python manage.py collectstatic --noinput
+        pip install -r requirements_remote.txt
+        
+        mkdir logs
+        python manage.py collectstatic
+        rm -rf logs
     deploy: |
         python manage.py migrate
